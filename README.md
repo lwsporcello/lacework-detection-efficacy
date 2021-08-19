@@ -30,3 +30,4 @@ lw-binary-2
 This binary will:
   1. Download install-demo-1.sh bash script, which can be used to install an XMRig coin miner
      (It will NOT execute the coinminer script)
+  2. The script is downloaded from a "known" bad domain
