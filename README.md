@@ -1,13 +1,14 @@
 # detection-testing
+These tools are designed to simulate malware with multiple stages, so it can be detected by Lacework. All binaries are written in Go (sources are provided). The process is automated, and can be started by running the command below.
 
-lw-det-test.sh
---------------
-Run this script to start the whole process:
+Run this command to start the whole process:
 
 ```
   curl https://raw.githubusercontent.com/sporcello7/detection-testing/main/lw-det-test.sh | bash
 ```
 
+lw-det-test.sh
+--------------
 This script will:
   1. Download the lw-binary first stage binary
   2. Change permissions to lw-binary so it can be executed
