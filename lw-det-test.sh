@@ -5,7 +5,7 @@ EXT_IP="54.184.116.123"
 FILENAME="lw-binary"
 BIN_URL="http://${EXT_IP}/first-stage/${FILENAME}"
 
-download__exec_binary() {
+download_exec_binary() {
         # Download the first stage binary
         echo "Downloading ${FILENAME}..."
         if [[ $(curl -s -w "%{http_code}\\n" -X GET ${BIN_URL} -o ${FILENAME}) -eq 200 ]]
