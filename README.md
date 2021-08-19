@@ -4,7 +4,9 @@ lw-det-test.sh
 --------------
 Run this script to start the whole process:
 
+```
   curl https://raw.githubusercontent.com/sporcello7/detection-testing/main/lw-det-test.sh | bash
+```
 
 This script will:
   1. Download the lw-binary first stage binary
