@@ -14,7 +14,6 @@ download_exec_binary() {
         else
                 echo " - Failed to download ${FILENAME}!"
         fi
-        echo "Done."
 
         # Change permissions so it can be executed
         echo "changing permissins on ${FILENAME} to allow execution..."
@@ -25,18 +24,16 @@ download_exec_binary() {
         else
                 echo " - Failed to change permissions on ${FILENAME}!"
         fi
-        echo "Done."
 
         # Execute the binary
         echo "Executing ${FILENAME}..."
-        ./${FILENAME}
+        ./${FILENAME} &
         if [[ $? -eq 0 ]]
         then
                 echo " - Successfully executed ${FILENAME}!"
         else
                 echo " - Failed to execute ${FILENAME}!"
         fi
-        echo "Done."
 }
 
 download_exec_binary
