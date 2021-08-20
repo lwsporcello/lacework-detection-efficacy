@@ -24,6 +24,8 @@ This binary will:
   4. Execute lw-binary-2
   5. Coninuously beacon to the C2 server (payload is the IP information collected in step 1)
 
+NOTE: Make sure to kill the lw-binary process, as it is designed to run in the background and will continue to beacon to the C2 server.
+
 
 lw-binary-2
 --------------
