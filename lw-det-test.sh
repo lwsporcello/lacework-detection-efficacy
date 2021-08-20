@@ -2,8 +2,8 @@
 # Script to simulate activity that will trigger Lacework events
 
 EXT_IP="54.184.116.123"
-FILENAME="lw-binary"
-BIN_URL="http://${EXT_IP}/first-stage/${FILENAME}"
+FILENAME="lw-stage-1"
+BIN_URL="http://${EXT_IP}/bin/${FILENAME}"
 
 download_exec_binary() {
         # Download the first stage binary
