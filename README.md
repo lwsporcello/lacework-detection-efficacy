@@ -14,22 +14,22 @@ lw-det-test.sh
 --------------
 This script will:
   1. Determine the OS type
-  2. Download the lw-stage-1-<os> first stage binary (file name based on OS type)
+  2. Download the lw-stage-1-* first stage binary (file name based on OS type, i.e. lw-stage-1-linux, lw-stage-1-darwin)
   3. Change permissions to stage 1 binary so it can be executed
   4. Execute stage 1 binary in the background
 
 
-lw-stage-1-<os>
+lw-stage-1-*
 ---------------
 This binary will:
   1. Determine OS type
-  2. Download lw-stage-2-<os> as a second stage binary (file name based on OS type)
+  2. Download lw-stage-2-* as a second stage binary (file name based on OS type, i.e. lw-stage-1-linux, lw-stage-1-darwin)
   3. Change permissions to stage 2 binary so it can be executed
   4. Execute stage 2 binary
   5. Beacon once to the C2 server, then terimnate
 
 
-lw-stage-2-<os>
+lw-stage-2-*
 --------------
 This binary will:
   1. Download install-demo-1.sh bash script, which can be used to install an XMRig coin miner
