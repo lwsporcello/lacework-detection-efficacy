@@ -23,7 +23,7 @@ lw-stage-1-*
 ---------------
 This binary will:
   1. Determine OS type
-  2. Download lw-stage-2-* as a second stage binary (file name based on OS type, i.e. lw-stage-1-linux, lw-stage-1-darwin)
+  2. Download lw-stage-2-* as a second stage binary (file name based on OS type, i.e. lw-stage-2-linux, lw-stage-2-darwin)
   3. Change permissions to stage 2 binary so it can be executed
   4. Execute stage 2 binary
   5. Beacon once to the C2 server, then terimnate
