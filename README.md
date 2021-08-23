@@ -7,12 +7,16 @@ Run this command to start the whole process:
 curl https://raw.githubusercontent.com/sporcello7/detection-testing/main/lw-det-test.sh | bash
 ```
 
+**NOTE**: You only need the bash script above to execute the detection testing simulations. The other files are the binaries' source code. Binaries are already compiled and being hosted on the C2 server, and will be downloaded as part of the simulations.
+
+
 lw-det-test.sh
 --------------
 This script will:
-  1. Download the lw-stage-1 first stage binary
-  2. Change permissions to lw-stage-1 so it can be executed
-  3. Execute lw-stage-1 in the background
+  1. Determine the OS type
+  2. Download the lw-stage-1 first stage binary (based on OS type)
+  3. Change permissions to lw-stage-1 so it can be executed
+  4. Execute lw-stage-1 in the background
 
 
 lw-stage-1
@@ -24,7 +28,7 @@ This binary will:
   4. Execute lw-stage-2
   5. Coninuously beacon to the C2 server (payload is the IP information collected in step 1)
 
-NOTE: Make sure to kill the lw-stage-1 process, as it is designed to run in the background and will continue to beacon to the C2 server.
+**NOTE**: Make sure to kill the lw-stage-1 process, as it is designed to run in the background and will continue to beacon to the C2 server.
 
 
 lw-stage-2
