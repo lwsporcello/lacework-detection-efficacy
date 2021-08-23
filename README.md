@@ -14,26 +14,27 @@ lw-det-test.sh
 --------------
 This script will:
   1. Determine the OS type
-  2. Download the lw-stage-1 first stage binary (based on OS type)
-  3. Change permissions to lw-stage-1 so it can be executed
-  4. Execute lw-stage-1 in the background
+  2. Download the lw-stage-1-<os> first stage binary (file name based on OS type)
+  3. Change permissions to stage 1 binary so it can be executed
+  4. Execute stage 1 binary in the background
 
 
-lw-stage-1
+lw-stage-1-<os>
 ---------------
 This binary will:
-  1. Collect IP information about intefaces
-  2. Download lw-stage-2 as a second stage binary
-  3. Change permissions to lw-stage-2 so it can be executed
-  4. Execute lw-stage-2
-  5. Coninuously beacon to the C2 server (payload is the IP information collected in step 1)
+  1. Determine OS type
+  2. Download lw-stage-2-<os> as a second stage binary (file name based on OS type)
+  3. Change permissions to stage 2 binary so it can be executed
+  4. Execute stage 2 binary
+  5. Beacon once to the C2 server, then terimnate
 
 
-lw-stage-2
+lw-stage-2-<os>
 --------------
 This binary will:
   1. Download install-demo-1.sh bash script, which can be used to install an XMRig coin miner
      (It will NOT execute the coinminer script)
   2. The script is downloaded from a "known" bad domain
+  3. Continuosly beacon to C2 server
 
 **NOTE**: Make sure to kill the lw-stage-2 process, as it is designed to run in the background and will continue to beacon to the C2 server if not killed.
