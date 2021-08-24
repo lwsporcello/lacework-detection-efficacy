@@ -4,7 +4,7 @@ These tools are designed to simulate malware with multiple stages, so it can be 
 Run this command to begin:
 
 ```
-curl https://raw.githubusercontent.com/sporcello7/detection-testing/main/lw-det-test.sh | bash
+bash <(curl https://raw.githubusercontent.com/sporcello7/detection-testing/main/lw-det-test.sh)
 ```
 
 This script will prompt you to choose which simualtions you want to run. Enter all simulations you want to run in a comma separated list.
