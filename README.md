@@ -1,5 +1,5 @@
 # detection-testing
-These tools are designed to simulate malware with multiple stages, so it can be detected by Lacework. Each simulation is explained below, with its mapping to the Mitre Att&ck tactics and techniques. All binaries are written in Go (sources are provided). The process is automated, and can be started by running the command below.
+These tools are designed to simulate malware with multiple stages, so it can be detected by [Lacework](https://lacework.com). Each simulation is explained below, with its mapping to the [Mitre Att&ck](https://attack.mitre.org/#) tactics and techniques. All binaries are written in Go (sources are provided). The process is automated, and can be started by running the command below.
 
 Run this command to begin:
 
