@@ -64,7 +64,7 @@ read -p 'Enter Selection(s): ' selection
 
 #Error check input
 while ! [[ "$selection" =~  ^[0-2](,[0-2])*$ ]]; do
-	read -p 'Bad Entry. Enter selection(s): ' selection
+	read -p 'Bad Entry. Enter selection(s): ' selection </dev/tty
 done
 
 #run each simulation selected
