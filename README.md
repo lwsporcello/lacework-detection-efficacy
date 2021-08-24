@@ -48,6 +48,8 @@ This binary will:
   3. Each IP in ths list is scanned for open port 22 (ssh)
   4. One host is choosen from the list (the first host), and 10x ssh logins are attempted with invalid credentials
 
+This binary will be executed in the background, and usually takes 1-2 minutes to complete.
+
 ---
 
 # Simulation 2
@@ -60,6 +62,8 @@ This binary will:
   3. Execute stage 2 binary
   4. Beacon once to the C2 server, then terimnate
 
+This binary will be executed in the background, and usually takes 1 minute or less to complete.
+
 ### lw-stage-2
 This binary will:
   1. Download install-demo-1.sh bash script, which can be used to install an XMRig coin miner
@@ -67,4 +71,4 @@ This binary will:
   2. The script is downloaded from a "known" bad domain
   3. Continuosly beacon to C2 server
 
-**NOTE**: Make sure to kill the lw-stage-2 process, as it is designed to run in the background and will continue to beacon to the C2 server if not killed.
+This binary will be executed in the background as a child process of lw-stage-1. This binary run indefinitely, **so be sure to manually kill this process!!**
