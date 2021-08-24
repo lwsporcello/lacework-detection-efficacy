@@ -39,9 +39,7 @@ This script will:
 ---
 
 # Simulation 1
-This simulation is designed to replicate attacker activity attempting Reconnaissance (active scanning), Discovery (network service scan) and Credential Access (brute force) tactics within your environment. 
-
-## Binaries used in this simulation
+This simulation is designed to replicate attacker activity attempting Reconnaissance (active scanning), Discovery (network service scan) and Credential Access (brute force) tactics within your environment. Binaries used in this simulation include:
 
 ### lw-scan-brute
 This binary will:
@@ -53,10 +51,9 @@ This binary will:
 ---
 
 # Simulation 2
-This simulation is designed to replicate attacker activity attempting Command and Control (multi-stage channels) and Execution (command and scripting interpreter) and Impact (resource hijacking) tactics within your environment. 
+This simulation is designed to replicate attacker activity attempting Command and Control (multi-stage channels) and Execution (command and scripting interpreter) and Impact (resource hijacking) tactics within your environment. Binaries used in this simulation include:
 
-## Binaries used in this simulation
-### lw-stage-1**
+### lw-stage-1
 This binary will:
   1. Download lw-stage-2 as a second stage binary
   2. Change permissions to stage 2 binary so it can be executed
