@@ -132,8 +132,8 @@ func main() {
 		fmt.Println("Will choose one from this list to simulate brute force...")
 		time.Sleep(1*time.Second)
 		fmt.Println("Attempting to ssh to: "+ips_port_open[i])
-		// do this 10 times
-		for j := 0; j < 10; j++ {
+		// do this 20 times
+		for j := 0; j < 20; j++ {
 			fmt.Println("Attempt "+strconv.Itoa(j+1))
 			client, session, err := connectToHost("ubuntu", "password1", ips_port_open[i])
 			if err != nil {
