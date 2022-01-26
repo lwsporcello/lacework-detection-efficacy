@@ -1,4 +1,6 @@
 # detection-testing
+
+[![Git](https://app.soluble.cloud/api/v1/public/badges/aa718f42-8f9c-4fab-8f9f-952157d2879b.svg?orgId=601904207385)](https://app.soluble.cloud/repos/details/github.com/lwsporcello/detection-testing?orgId=601904207385)  
 These tools are designed to simulate malware with multiple stages, so it can be detected by [Lacework](https://lacework.com). Each simulation is explained below, with its mapping to the [MITRE ATT&CK](https://attack.mitre.org/#) tactics and techniques. All binaries are written in Go (sources are provided). The process is automated, and can be started by running the command below.
 
 Run this command to begin:
