@@ -12,11 +12,11 @@ This script will prompt you to choose which simualtions you want to run. Enter a
 ```
 -----------------------------------------------------
 | Welcome to the Lacework detection testing script. |
-| This script will run attack simulation in your    |
+| This script will run attack simulations in your   |
 | workload running the Lacework agent. The agent    |
 | will capture this activity and generate events in |
-| the Lacework UI. Begin by choosing which          |
-| simulations you want to run...                    |
+| the Lacework UI. Please choose which simulation(s)|
+| you want to run...                                |
 -----------------------------------------------------
 
   0. Quit

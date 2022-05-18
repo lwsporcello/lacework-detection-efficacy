@@ -1,25 +1,25 @@
 #!/bin/bash
 # Script to simulate activity that will trigger Lacework events
 
+#set constants
 HOST="lacework.ddns.net"
 SIM_1_BIN="lw-scan-brute"
 SIM_2_BIN="lw-stage-1"
 BIN_URL="http://${HOST}/bin/"
 
 download_exec_binary() {
-
-	# Download the binary
+	#download the binary
 	echo "Downloading $1..."
-    if [[ $(curl -s -w "%{http_code}\\n" -X GET ${BIN_URL}$1 -o $1) -eq 200 ]]
-    then
-        echo " - Successfully downloaded $1!"
-    else
-        echo " - Failed to download $1!"
+	if [[ $(curl -s -w "%{http_code}\\n" -X GET ${BIN_URL}$1 -o $1) -eq 200 ]]
+	then
+		echo " - Successfully downloaded $1!"
+	else
+		echo " - Failed to download $1!"
 		echo ""
 		continue
-    fi
+	fi
 
-	# Change permissions so it can be executed
+	#change permissions so it can be executed
 	echo "Changing permissins on $1 to allow execution..."
 	chmod u+x $1
 	if [[ $? -eq 0 ]]
@@ -31,27 +31,27 @@ download_exec_binary() {
 		continue
 	fi
 
-	# Execute the binary
+	#execute the binary
 	echo "Executing $1..."
 	./$1$2 >/dev/null 2>&1 &
 	if [[ $? -eq 0 ]]
-    then
-        echo " - Successfully executed $1!"
-    else
-        echo " - Failed to execute $1!"
+	then
+		echo " - Successfully executed $1!"
+	else
+		echo " - Failed to execute $1!"
 		echo ""
 		continue
-    fi
+	fi
 }
 
-# Show menu
+#show menu
 echo "-----------------------------------------------------"
 echo "| Welcome to the Lacework detection testing script. |"
-echo "| This script will run attack simulation in your    |"
+echo "| This script will run attack simulations in your   |"
 echo "| workload running the Lacework agent. The agent    |"
 echo "| will capture this activity and generate events in |"
-echo "| the Lacework UI. Begin by choosing which          |"
-echo "| simulations you want to run...                    |"
+echo "| the Lacework UI. Please choose which simulation(s)|"
+echo "| you want to run...                                |"
 echo "-----------------------------------------------------"
 echo ""
 echo "  0. Quit"
@@ -62,7 +62,7 @@ echo "You may enter one simulation (i.e. 2) or multiple comma separated (i.e. 1,
 echo ""
 read -p 'Enter Selection(s): ' selection
 
-#Error check input
+#error check input
 while ! [[ "$selection" =~  ^[0-2](,[0-2])*$ ]]; do
 	read -p 'Bad Entry. Enter selection(s): ' selection </dev/tty
 done
