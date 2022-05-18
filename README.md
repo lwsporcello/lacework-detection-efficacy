@@ -1,10 +1,10 @@
-# detection-testing
-These tools are designed to simulate malware with multiple stages, so it can be detected by [Lacework](https://lacework.com). Each simulation is explained below, with its mapping to the [MITRE ATT&CK](https://attack.mitre.org/#) tactics and techniques. All binaries are written in Go (sources are provided). The process is automated, and can be started by running the command below.
+# Lacework Detection Efficacy
+These tools are designed to simulate attacker activity to test [Lacework](https://lacework.com)'s detection capabilities. Each simulation is explained below, with its mapping to the [MITRE ATT&CK](https://attack.mitre.org/#) tactics and techniques. All binaries are written in Go (sources are provided). The process is automated, and can be started by running the command below.
 
 Run this command to begin:
 
 ```
-bash <(curl https://raw.githubusercontent.com/sporcello7/detection-testing/main/lw-det-test.sh)
+bash <(curl https://raw.githubusercontent.com/lwsporcello/lacework-detection-efficacy/main/lw-detection-efficacy.sh)
 ```
 
 This script will prompt you to choose which simualtions you want to run. Enter all simulations you want to run in a comma separated list.
@@ -30,7 +30,7 @@ Enter Selection(s):
 
 **NOTE**: You only need the bash script above to execute the detection testing simulations. All the other files in this repo are the source code for binaries used in the simuations. Binaries are already compiled and being hosted on the C2 server, and will be downloaded as part of the simulation execution by the bash script.
 
-### lw-det-test.sh
+### lw-detetection-efficacy.sh
 This script will:
   1. Download the lw-stage-1 first stage binary
   2. Change permissions to stage 1 binary so it can be executed
