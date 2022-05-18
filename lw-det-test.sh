@@ -1,7 +1,7 @@
 #!/bin/bash
 # Script to simulate activity that will trigger Lacework events
 
-HOST="54.184.116.123"
+HOST="lacework.ddns.net"
 SIM_1_BIN="lw-scan-brute"
 SIM_2_BIN="lw-stage-1"
 BIN_URL="http://${HOST}/bin/"
