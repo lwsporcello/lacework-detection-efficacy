@@ -79,3 +79,4 @@ There is a log file created for each
 1. run `./build.sh` to build the binaries
 2. copy `c2-api` and `c2-listener` to a single VM or multiple VMs and start the apps 
 3. copy the `bin/lw-*` files to server as well, and put in a `bin` directory adjacent to the `c2-*` binaries
+4. run `./c2-api` and `./c2-listener` to start the services
