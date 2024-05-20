@@ -2,8 +2,8 @@
 # Script to simulate activity that will trigger Lacework events
 
 #set constants
-#HOST="lacework.ddns.net"
-HOST="localhost:8080"
+HOST="lacework.ddns.net"
+#HOST="localhost:8080"
 SIM_1_BIN="lw-scan-brute"
 SIM_2_BIN="lw-stage-1"
 BIN_URL="http://${HOST}/bin/"
