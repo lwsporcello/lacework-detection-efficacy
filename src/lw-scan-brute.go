@@ -1,15 +1,69 @@
 package main
 
 import (
-	"fmt"
+	"golang.org/x/crypto/ssh"
 	"net"
 	"strconv"
-	"time"
 	"strings"
-	"golang.org/x/crypto/ssh"
+	"time"
 )
 
-func get_ips() ([]string, error) {
+func main() {
+	// get ips on this system
+	Log := setupLogger("lw-scan-brute.log")
+	ips, ipErr := getIps()
+	if ipErr != nil {
+		panic(ipErr)
+	}
+
+	// get ip ranges from ips found
+	expIps := expandIps(ips)
+
+	// check each ip in the slice for open port
+	Log.Println("Scanning IPs in local subnet for open ssh port (22)...")
+	var ipsPortOpen []string
+	for _, ip := range expIps {
+		//fmt.Println("Scanning: "+ip)
+		open := scanPort("tcp", ip, 22)
+		//fmt.Println("Port 22:", open)
+		if open {
+			//fmt.Println(ip+" has port 22 open")
+			ipsPortOpen = append(ipsPortOpen, ip)
+		}
+	}
+	Log.Println("Found " + strconv.Itoa(len(ipsPortOpen)) + " hosts with port 22 open")
+	Log.Println(ipsPortOpen)
+
+	// attempt ssh login
+	for i := 0; i < 1; i++ {
+		Log.Println("Will choose one from this list to simulate brute force...")
+		time.Sleep(1 * time.Second)
+		Log.Println("Attempting to ssh to: " + ipsPortOpen[i])
+		// do this 20 times
+		for j := 0; j < 20; j++ {
+			Log.Println("Attempt " + strconv.Itoa(j+1))
+			client, session, err := connectToHost("ubuntu", "password1", ipsPortOpen[i])
+			if err != nil {
+				//panic(err)
+				Log.Println(" ", err)
+				continue
+			}
+			out, err := session.CombinedOutput("ls")
+			if err != nil {
+				//panic(err)
+				Log.Println(" ", err)
+				continue
+			}
+			Log.Println(string(out))
+			_ = client.Close()
+
+			//sleep for 1 second between attempts
+			time.Sleep(1 * time.Second)
+		}
+	}
+}
+
+func getIps() ([]string, error) {
 	var ips []string
 
 	ifaces, err := net.Interfaces()
@@ -42,7 +96,7 @@ func get_ips() ([]string, error) {
 			if ip == nil {
 				continue // not an Ipv4 addr
 			}
-			ips = append (ips, ip.String())
+			ips = append(ips, ip.String())
 		}
 	}
 	return ips, nil
@@ -57,17 +111,17 @@ func appendIfMissing(slice []string, string string) []string {
 	return append(slice, string)
 }
 
-func expand_ips(ips []string) []string {
-	var exp_ips []string
+func expandIps(ips []string) []string {
+	var expIps []string
 
 	for _, ip := range ips {
 		ipSlice := strings.Split(ip, ".")
 		for i := 1; i <= 255; i++ {
-			new_ip := ipSlice[0]+"."+ipSlice[1]+"."+ipSlice[2]+"."+strconv.Itoa(i)
-			exp_ips = appendIfMissing(exp_ips, new_ip)
+			newIp := ipSlice[0] + "." + ipSlice[1] + "." + ipSlice[2] + "." + strconv.Itoa(i)
+			expIps = appendIfMissing(expIps, newIp)
 		}
 	}
-	return exp_ips
+	return expIps
 }
 
 func scanPort(protocol, hostname string, port int) bool {
@@ -77,7 +131,7 @@ func scanPort(protocol, hostname string, port int) bool {
 	if err != nil {
 		return false
 	}
-	defer conn.Close()
+	_ = conn.Close()
 	return true
 }
 
@@ -95,63 +149,9 @@ func connectToHost(user string, pass string, host string) (*ssh.Client, *ssh.Ses
 
 	session, err := client.NewSession()
 	if err != nil {
-		client.Close()
+		_ = client.Close()
 		return nil, nil, err
 	}
 
 	return client, session, nil
-}
-
-func main() {
-	// get ips on this system
-	ips, ip_err := get_ips()	
-	if ip_err != nil {
-		panic(ip_err)
-	}
-
-	// get ip ranges from ips found
-	exp_ips := expand_ips(ips)
-
-	// check each ip in the slice for open port
-	fmt.Println("Scanning IPs in local subnet for open ssh port (22)...")
-	var ips_port_open []string
-	for _, ip := range exp_ips {
-		//fmt.Println("Scanning: "+ip)
-		open := scanPort("tcp", ip, 22)
-		//fmt.Println("Port 22:", open)
-		if (open) {
-			//fmt.Println(ip+" has port 22 open")
-			ips_port_open = append(ips_port_open, ip)	
-		}
-	}
-	fmt.Println("Found "+strconv.Itoa(len(ips_port_open))+" hosts with port 22 open")
-	fmt.Println(ips_port_open)
-
-	// attempt ssh login
-	for i := 0; i < 1; i++ {
-		fmt.Println("Will choose one from this list to simulate brute force...")
-		time.Sleep(1*time.Second)
-		fmt.Println("Attempting to ssh to: "+ips_port_open[i])
-		// do this 20 times
-		for j := 0; j < 20; j++ {
-			fmt.Println("Attempt "+strconv.Itoa(j+1))
-			client, session, err := connectToHost("ubuntu", "password1", ips_port_open[i])
-			if err != nil {
-				//panic(err)
-				fmt.Println(" ",err)
-				continue
-			}
-			out, err := session.CombinedOutput("ls")
-			if err != nil {
-				//panic(err)
-				fmt.Println(" ",err)
-				continue
-	       		}
-			fmt.Println(string(out))
-			client.Close()
-
-			//sleep for 1 second between attempts
-			time.Sleep(1*time.Second)
-		}
-	}
 }
