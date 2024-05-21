@@ -42,16 +42,11 @@ func httpGet(url string, filename string) error {
 	return err
 }
 
-func setupLogger(filename string) *log.Logger {
+func setupLogger(filename string) *os.File {
 	wd, _ := os.Getwd()
-	logpath := wd + "/" + filename
-	var file, err1 = os.Create(logpath)
-
-	if err1 != nil {
-		panic(err1)
+	f, err := os.OpenFile(wd+"/"+filename, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatalf("error opening file: %v", err)
 	}
-
-	Log := log.New(file, "", log.LstdFlags|log.Lshortfile)
-	Log.Println("LogFile : " + logpath)
-	return Log
+	return f
 }

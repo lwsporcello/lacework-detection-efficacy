@@ -2,7 +2,9 @@ package main
 
 import (
 	"golang.org/x/crypto/ssh"
+	"log"
 	"net"
+	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -10,7 +12,12 @@ import (
 
 func main() {
 	// get ips on this system
-	Log := setupLogger("lw-scan-brute.log")
+	f := setupLogger("lw-scan-brute.log")
+	defer func(f *os.File) {
+		_ = f.Close()
+	}(f)
+	log.SetOutput(f)
+
 	ips, ipErr := getIps()
 	if ipErr != nil {
 		panic(ipErr)
@@ -20,7 +27,7 @@ func main() {
 	expIps := expandIps(ips)
 
 	// check each ip in the slice for open port
-	Log.Println("Scanning IPs in local subnet for open ssh port (22)...")
+	log.Println("Scanning IPs in local subnet for open ssh port (22)...")
 	var ipsPortOpen []string
 	for _, ip := range expIps {
 		//fmt.Println("Scanning: "+ip)
@@ -31,30 +38,30 @@ func main() {
 			ipsPortOpen = append(ipsPortOpen, ip)
 		}
 	}
-	Log.Println("Found " + strconv.Itoa(len(ipsPortOpen)) + " hosts with port 22 open")
-	Log.Println(ipsPortOpen)
+	log.Println("Found " + strconv.Itoa(len(ipsPortOpen)) + " hosts with port 22 open")
+	log.Println(ipsPortOpen)
 
 	// attempt ssh login
 	for i := 0; i < 1; i++ {
-		Log.Println("Will choose one from this list to simulate brute force...")
+		log.Println("Will choose one from this list to simulate brute force...")
 		time.Sleep(1 * time.Second)
-		Log.Println("Attempting to ssh to: " + ipsPortOpen[i])
+		log.Println("Attempting to ssh to: " + ipsPortOpen[i])
 		// do this 20 times
 		for j := 0; j < 20; j++ {
-			Log.Println("Attempt " + strconv.Itoa(j+1))
+			log.Println("Attempt " + strconv.Itoa(j+1))
 			client, session, err := connectToHost("ubuntu", "password1", ipsPortOpen[i])
 			if err != nil {
 				//panic(err)
-				Log.Println(" ", err)
+				log.Println(" ", err)
 				continue
 			}
 			out, err := session.CombinedOutput("ls")
 			if err != nil {
 				//panic(err)
-				Log.Println(" ", err)
+				log.Println(" ", err)
 				continue
 			}
-			Log.Println(string(out))
+			log.Println(string(out))
 			_ = client.Close()
 
 			//sleep for 1 second between attempts
